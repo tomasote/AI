@@ -13,7 +13,7 @@ class Node:
         self.f = f
     
     def __str__(self):
-        return (f"State: {self.state}\nLength of path = {len(self.path)}\nPath: {self.path}\n")
+        return (f"State: {self.state}\nLength of path = {len(self.path)}\nPath: {self.path}\nCost: {self.cost}\n F: {self.f}")
     
     def update_path(self, new_val):
         self.path = self.path + [new_val]
@@ -28,9 +28,9 @@ FAILURE = "There is no path"
 frontier = []
 reached = []
 df = pd.read_csv('100_nodes.csv')
-w = 0.5
+w = 0
 start_node_idx = 0
-end_node_idx = 99
+end_node_idx = 19
 path = []
 generated_nodes = []
 
@@ -64,7 +64,7 @@ def generate_children(df, w, lst, end_node_idx, parent):
         #print(parent.path)
         #print(parent.state)
         #print(f"parent: {parent.path}")
-        node = Node(cost+parent.cost, i, f(df, w, current_node_idx=i, end_node_idx=end_node_idx))
+        node = Node(cost+parent.cost, i, f(df, w, i, end_node_idx))
         node.set_path(parent.path + [i])
         #print(f"Child: {node.path}")
         result.append(node)
@@ -110,7 +110,7 @@ def astar(df, w, start_node_idx, end_node_idx):
             if idx == -1:
                 frontier.append(child)
                 reached.append(child)
-            elif child.cost < reached[idx].cost:
+            elif child.f < reached[idx].f:
                     reached[idx] = child
                     frontier.append(child)
     return FAILURE
