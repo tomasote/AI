@@ -30,7 +30,7 @@ reached = []
 df = pd.read_csv('100_nodes.csv')
 w = 0.5
 start_node_idx = 0
-end_node_idx = 19
+end_node_idx = 99
 path = []
 generated_nodes = []
 
@@ -54,7 +54,7 @@ def get_possible_directions(df, node_idx):
 def generate_children(df, w, lst, end_node_idx, parent):
     result = []
     #parent.update_path(parent.state)
-    print(lst)
+    #print(lst)
     for i in lst:
         #print(i+3)
         cost = df.iloc[parent.state][i+3]
@@ -63,10 +63,10 @@ def generate_children(df, w, lst, end_node_idx, parent):
         #print(parent.cost)
         #print(parent.path)
         #print(parent.state)
-        print(f"parent: {parent.path}")
+        #print(f"parent: {parent.path}")
         node = Node(cost+parent.cost, i, f(df, w, current_node_idx=i, end_node_idx=end_node_idx))
         node.set_path(parent.path + [i])
-        print(f"Child: {node.path}")
+        #print(f"Child: {node.path}")
         result.append(node)
         generated_nodes.append(node)
     return result
@@ -98,7 +98,7 @@ def astar(df, w, start_node_idx, end_node_idx):
         node = select_best_node(df, w)
         #print(node)
         #print(get_possible_directions(df, node.state))
-        print(frontier)
+        #print(frontier)
         #time.sleep(10)
         if node.state == end_node_idx:
             #node.update_path(node.state)
