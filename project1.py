@@ -105,7 +105,7 @@ startbool = False
 stopbool = False
 while(not wbool):
     try:
-        w = float(input('Enter a weight value between 0 and 1: '))
+        w = float(input('Enter a weight parameter between 0 and 1: '))
         assert w >= 0 and w <= 1
     except:
         print("Faulty weight parameter")
