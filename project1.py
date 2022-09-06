@@ -35,11 +35,11 @@ end_node_idx = 19
 path = []
 generated_nodes = []
 
-def f(df, w, current_node_idx, end_node_idx):
-    return(w * cost(df, current_node_idx, end_node_idx) + (1-w)*h(df, current_node_idx, end_node_idx))
+def f(df, w, current_node_idx, end_node_idx, node):
+    return(w * cost(node) + (1-w)*h(df, current_node_idx, end_node_idx))
 
-def cost(df, current_node, other_node):
-    return df.iloc[current_node][other_node + 3]
+def cost(node):
+    return node.cost
 
 def h(df, current_node_idx, end_node_idx):
     return np.abs(df.iloc[current_node_idx]['x'] - df.iloc[end_node_idx]['x']) + np.abs(df.iloc[current_node_idx]['y'] - df.iloc[end_node_idx]['y'])
@@ -56,8 +56,8 @@ def generate_children(df, w, lst, end_node_idx, parent):
     result = []
     for i in lst:
         cost = df.iloc[parent.state][i+3]
-        node = Node(cost+parent.cost, i, f(df, w, i, end_node_idx))
-        node.set_f(f(df, w, i, end_node_idx))
+        node = Node(cost+parent.cost, i, f(df, w, i, end_node_idx, parent))
+        node.set_f(f(df, w, i, end_node_idx, node))
         node.set_path(parent.path + [i])
         result.append(node)
         generated_nodes.append(node)
@@ -72,17 +72,17 @@ def search_for_state(state, lst):
 def select_best_node(df, w):
     fbest = INFINITY
     for idx, node in enumerate(frontier):
-        if f(df, w, node.state, end_node_idx) < fbest:
-            fbest = f(df, w, node.state, end_node_idx)
+        if f(df, w, node.state, end_node_idx, node) < fbest:
+            fbest = f(df, w, node.state, end_node_idx, node)
             ibest = idx
     node = frontier[ibest]
     del frontier[ibest]
     return node
     
 def astar(df, w, start_node_idx, end_node_idx):
-
-    node = Node(0, start_node_idx, f(df, w, start_node_idx, end_node_idx))
-    node.set_f(f(df, w, start_node_idx, end_node_idx))
+    init_node = Node(0, 0, 0)
+    node = Node(0, start_node_idx, f(df, w, start_node_idx, end_node_idx, init_node))
+    node.set_f(f(df, w, start_node_idx, end_node_idx, node))
     node.set_path([start_node_idx])
     frontier.append(node)
     reached.append(node)
