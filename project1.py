@@ -30,8 +30,8 @@ frontier = []
 reached = []
 df = pd.read_csv('100_nodes.csv')
 w = 0.5
-start_node_idx = 0
-end_node_idx = 19
+start_node_idx = 99
+end_node_idx = 0
 path = []
 generated_nodes = []
 
@@ -100,6 +100,35 @@ def astar(df, w, start_node_idx, end_node_idx):
                     reached[idx] = child
                     frontier.append(child)
     return FAILURE
-    
+wbool = False
+startbool = False
+stopbool = False
+while(not wbool):
+    try:
+        w = float(input('Enter a weight value between 0 and 1: '))
+        assert w >= 0 and w <= 1
+    except:
+        print("Faulty weight parameter")
+    else:
+        wbool = True
+while(not startbool):
+    try:
+        start_node_idx = int(input('Enter a starting node (index): '))
+        assert start_node_idx >= 0 and start_node_idx <= 99 and isinstance(start_node_idx, int)
+    except:
+        print("Faulty starting index parameter")
+    else:
+        startbool = True
+while(not stopbool):
+    try:
+        end_node_idx = int(input('Enter a end node (index): '))
+        assert end_node_idx >= 0 and end_node_idx <= 99 and isinstance(end_node_idx, int) and start_node_idx != end_node_idx
+    except:
+        print("Faulty starting index parameter")
+    else:
+        stopbool = True
+
+print("###############################################################################\n")
 print(astar(df, w, start_node_idx, end_node_idx))
-print(f"Generated nodes: {len(generated_nodes)}")
+print(f"Generated nodes: {len(generated_nodes)}\n")
+print("###############################################################################")
