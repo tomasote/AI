@@ -13,12 +13,14 @@ class Node:
         self.f = f
     
     def __str__(self):
-        return (f"State: {self.state}\nLength of path = {len(self.path)}\nPath: {self.path}\nCost: {self.cost}\n F: {self.f}")
+        return (f"State: {self.state}\nLength of path = {len(self.path)}\nPath: {self.path}\nCost: {self.cost}\nF: {self.f}")
     
     def update_path(self, new_val):
         self.path = self.path + [new_val]
     def set_path(self, lst):
         self.path = lst
+    def set_f(self, f):
+        self.f = f
 
 
 INFINITY = 9999999999999
@@ -65,6 +67,7 @@ def generate_children(df, w, lst, end_node_idx, parent):
         #print(parent.state)
         #print(f"parent: {parent.path}")
         node = Node(cost+parent.cost, i, f(df, w, i, end_node_idx))
+        node.set_f(f(df, w, i, end_node_idx))
         node.set_path(parent.path + [i])
         #print(f"Child: {node.path}")
         result.append(node)
@@ -90,7 +93,8 @@ def select_best_node(df, w):
     
 def astar(df, w, start_node_idx, end_node_idx):
 
-    node = Node(0, start_node_idx, f(df, w, current_node_idx=start_node_idx, end_node_idx=end_node_idx))
+    node = Node(0, start_node_idx, f(df, w, start_node_idx, end_node_idx))
+    node.set_f(f(df, w, start_node_idx, end_node_idx))
     node.set_path([start_node_idx])
     frontier.append(node)
     reached.append(node)
@@ -122,4 +126,4 @@ def astar(df, w, start_node_idx, end_node_idx):
 #print(f(df, 0.5, 99, 99))
 print(astar(df, w, start_node_idx, end_node_idx))
 print(f"Generated nodes: {len(generated_nodes)}")
-print(df.iloc[25][18])
+#print(df.iloc[25][18])
