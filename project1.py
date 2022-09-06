@@ -12,7 +12,7 @@ class Node:
         self.f = f
     
     def __str__(self):
-        return (f"State: {self.state}\nLength of path = {len(self.path)}\nPath: {self.path}\nCost: {self.cost}\nF: {self.f}")
+        return (f"Length of path = {len(self.path)}\nPath: {self.path}")
     
     def update_path(self, new_val):
         self.path = self.path + [new_val]
