@@ -32,11 +32,10 @@ df = pd.read_csv('100_nodes.csv')
 w = 0.5
 start_node_idx = 99
 end_node_idx = 0
-path = []
 generated_nodes = []
 
-def f(df, w, current_node_idx, end_node_idx, node):
-    return(w * cost(node) + (1-w)*h(df, current_node_idx, end_node_idx))
+def f(df, w, current_node_idx, end_node_idx, current_node):
+    return(w * cost(current_node) + (1-w)*h(df, current_node_idx, end_node_idx))
 
 def cost(node):
     return node.cost
@@ -52,8 +51,9 @@ def get_possible_directions(df, node_idx):
             possible_destinations.append(i-3)
     return possible_destinations
 
-def generate_children(df, w, lst, end_node_idx, parent):
+def generate_children(df, w, end_node_idx, parent):
     result = []
+    lst = get_possible_directions(df, parent.state)
     for i in lst:
         cost = df.iloc[parent.state][i+3]
         node = Node(cost+parent.cost, i, f(df, w, i, end_node_idx, parent))
@@ -72,15 +72,15 @@ def search_for_state(state, lst):
 def select_best_node(df, w):
     fbest = INFINITY
     for idx, node in enumerate(frontier):
-        if f(df, w, node.state, end_node_idx, node) < fbest:
-            fbest = f(df, w, node.state, end_node_idx, node)
+        if node.f < fbest:
+            fbest = node.f
             ibest = idx
     node = frontier[ibest]
     del frontier[ibest]
     return node
     
 def astar(df, w, start_node_idx, end_node_idx):
-    init_node = Node(0, 0, 0)
+    init_node = Node(0, 0, 0) #Dummy node
     node = Node(0, start_node_idx, f(df, w, start_node_idx, end_node_idx, init_node))
     node.set_f(f(df, w, start_node_idx, end_node_idx, node))
     node.set_path([start_node_idx])
@@ -90,7 +90,7 @@ def astar(df, w, start_node_idx, end_node_idx):
         node = select_best_node(df, w)
         if node.state == end_node_idx:
             return node
-        child_list = generate_children(df, w, get_possible_directions(df, node.state), end_node_idx, node)
+        child_list = generate_children(df, w, end_node_idx, node)
         for child in child_list:
             idx = search_for_state(child.state, reached)
             if idx == -1:
@@ -100,9 +100,11 @@ def astar(df, w, start_node_idx, end_node_idx):
                     reached[idx] = child
                     frontier.append(child)
     return FAILURE
+
 wbool = False
 startbool = False
 stopbool = False
+
 while(not wbool):
     try:
         w = float(input('Enter a weight parameter between 0 and 1: '))
