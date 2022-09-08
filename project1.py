@@ -69,7 +69,7 @@ def search_for_state(state, lst):
             return idx
     return -1
 
-def select_best_node(df, w):
+def select_best_node():
     fbest = INFINITY
     for idx, node in enumerate(frontier):
         if node.f < fbest:
@@ -87,7 +87,7 @@ def astar(df, w, start_node_idx, end_node_idx):
     frontier.append(node)
     reached.append(node)
     while len(frontier) > 0:
-        node = select_best_node(df, w)
+        node = select_best_node()
         if node.state == end_node_idx:
             return node
         child_list = generate_children(df, w, end_node_idx, node)
@@ -96,7 +96,7 @@ def astar(df, w, start_node_idx, end_node_idx):
             if idx == -1:
                 frontier.append(child)
                 reached.append(child)
-            elif child.f < reached[idx].f:
+            elif child.cost < reached[idx].cost:
                     reached[idx] = child
                     frontier.append(child)
     return FAILURE
