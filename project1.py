@@ -109,6 +109,8 @@ while(not wbool):
     try:
         w = float(input('Enter a weight parameter between 0 and 1: '))
         assert w >= 0 and w <= 1
+    except KeyboardInterrupt:
+        quit()
     except:
         print("Faulty weight parameter")
     else:
@@ -117,6 +119,8 @@ while(not startbool):
     try:
         start_node_idx = int(input('Enter a starting node (index): '))
         assert start_node_idx >= 0 and start_node_idx <= 99 and isinstance(start_node_idx, int)
+    except KeyboardInterrupt:
+        quit()
     except:
         print("Faulty starting index parameter")
     else:
@@ -125,6 +129,8 @@ while(not stopbool):
     try:
         end_node_idx = int(input('Enter a end node (index): '))
         assert end_node_idx >= 0 and end_node_idx <= 99 and isinstance(end_node_idx, int) and start_node_idx != end_node_idx
+    except KeyboardInterrupt:
+        quit()
     except:
         print("Faulty starting index parameter")
     else:
