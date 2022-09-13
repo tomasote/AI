@@ -82,6 +82,7 @@ def select_best_node():
 def astar(df, w, start_node_idx, end_node_idx):
     init_node = Node(0, 0, 0) #Dummy node
     node = Node(0, start_node_idx, f(df, w, start_node_idx, end_node_idx, init_node))
+    generated_nodes.append(node)
     node.set_f(f(df, w, start_node_idx, end_node_idx, node))
     node.set_path([start_node_idx])
     frontier.append(node)
