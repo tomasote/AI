@@ -1,8 +1,5 @@
 import pandas as pd
 import numpy as np
-import time
-
-
 
 class Node:
     def __init__(self, cost, state, f):
